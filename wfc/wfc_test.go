@@ -46,9 +46,9 @@ func Test_tileGrid_tileWithLowestEntropy(t *testing.T) {
 	tg.tiles[1][1] = []Tile{}
 
 	expected := position{1, 1}
-	_, pos := tg.tileWithLowestEntropy()
+	pos := tg.tileWithLowestEntropy()
 
-	if expected != pos {
+	if expected != *pos {
 		t.Errorf("Failed, expected %v, got %v", expected, pos)
 	}
 }
@@ -65,7 +65,7 @@ func Test_tileGrid_collapseTile_success(t *testing.T) {
 		t.Errorf("Failed, expected %v, got %v", true, success)
 	}
 
-	tileMarkedAsCollapsed := tg.grid[pos.x][pos.y]
+	tileMarkedAsCollapsed := tg.positionsCollapsed[pos.x][pos.y]
 	if !tileMarkedAsCollapsed {
 		t.Errorf("Failed, expected %v, got %v", true, success)
 	}
@@ -90,7 +90,7 @@ func Test_tileGrid_collapseTile_neighboursUpdate(t *testing.T) {
 		t.Errorf("Failed, expected %v, got %v", true, success)
 	}
 
-	tileMarkedAsCollapsed := tg.grid[pos.x][pos.y]
+	tileMarkedAsCollapsed := tg.positionsCollapsed[pos.x][pos.y]
 	if !tileMarkedAsCollapsed {
 		t.Errorf("Failed, expected %v, got %v", true, success)
 	}
