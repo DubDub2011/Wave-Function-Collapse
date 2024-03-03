@@ -4,13 +4,13 @@ import (
 	"math/rand"
 )
 
-func Collapse(tiles []Tile, width int, length int) ([][]int, error) {
-	tileGrid := newTileGrid(width, length, tiles)
+func Collapse(tiles []Tile, width int, height int) ([][]int, error) {
+	tileGrid := newTileGrid(width, height, tiles)
 	positionTracker := tileStack{}
 
 	pos := position{
 		x: rand.Intn(width),
-		y: rand.Intn(length),
+		y: rand.Intn(height),
 	}
 	finished := false
 	for !finished {

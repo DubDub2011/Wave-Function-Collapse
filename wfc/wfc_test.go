@@ -9,7 +9,7 @@ func Test_Collapse_Simple(t *testing.T) {
 	testCases := []struct {
 		name          string
 		tileSet       []Tile
-		width, length int
+		width, height int
 	}{
 		{
 			"Small grid, two tile",
@@ -26,7 +26,7 @@ func Test_Collapse_Simple(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			// Call the function from your package
-			result, err := Collapse(tc.tileSet, tc.width, tc.length)
+			result, err := Collapse(tc.tileSet, tc.width, tc.height)
 			if err != nil {
 				// Check if the result matches the expected value
 				t.Errorf("Failed, expected no error, got %v", err)

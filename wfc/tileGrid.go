@@ -10,9 +10,9 @@ type tileGrid struct {
 	positionsCollapsed [][]bool   // tracks the positions that have been collapsed
 }
 
-func newTileGrid(width, length int, tileset []Tile) tileGrid {
-	if width <= 0 || length <= 0 {
-		panic(fmt.Errorf("error creating tile grid, width or length 0"))
+func newTileGrid(width, height int, tileset []Tile) tileGrid {
+	if width <= 0 || height <= 0 {
+		panic(fmt.Errorf("error creating tile grid, width or height 0"))
 	}
 
 	if len(tileset) <= 1 {
@@ -22,8 +22,8 @@ func newTileGrid(width, length int, tileset []Tile) tileGrid {
 	tiles := make([][][]Tile, width)
 	grid := make([][]bool, width)
 	for row := range tiles {
-		tiles[row] = make([][]Tile, length)
-		grid[row] = make([]bool, length)
+		tiles[row] = make([][]Tile, height)
+		grid[row] = make([]bool, height)
 		for col := range tiles[row] {
 			tiles[row][col] = tileset
 		}
@@ -146,10 +146,12 @@ func (tg tileGrid) getTileIds() [][]int {
 	return tileIds
 }
 
-// returns position with lowest entropy, and if none can be found
+// returns position with lowest entropy, and nil if none can be found
 func (tg tileGrid) tileWithLowestEntropy() *position {
-	tileValue := -1
+	lowestOptions := -1
 	possiblePos := make([]position, 0)
+
+	// First find the lowest value of a tile
 	for row := range tg.tiles {
 		for col := range tg.tiles[row] {
 			tileCollapsed := tg.positionsCollapsed[row][col]
@@ -157,18 +159,29 @@ func (tg tileGrid) tileWithLowestEntropy() *position {
 				continue
 			}
 
-			if len(tg.tiles[row][col]) < tileValue || tileValue == -1 {
-				tileValue = len(tg.tiles[row][col])
-				possiblePos = []position{{row, col}}
-			} else if len(tg.tiles[row][col]) == tileValue {
-				possiblePos = append(possiblePos, position{row, col})
+			if len(tg.tiles[row][col]) < lowestOptions || lowestOptions == -1 {
+				lowestOptions = len(tg.tiles[row][col])
 			}
 		}
 	}
 
 	// Means we're done, no tiles to be collapsed left
-	if len(possiblePos) == 0 {
+	if lowestOptions == -1 {
 		return nil
+	}
+
+	// Now append options that have the same lowest tile
+	for row := range tg.tiles {
+		for col := range tg.tiles[row] {
+			tileCollapsed := tg.positionsCollapsed[row][col]
+			if tileCollapsed {
+				continue
+			}
+
+			if len(tg.tiles[row][col]) == lowestOptions {
+				possiblePos = append(possiblePos, position{row, col})
+			}
+		}
 	}
 
 	res := possiblePos[rand.Intn(len(possiblePos))]
