@@ -1,0 +1,22 @@
+[
+    {
+        "name": "blank.png",
+        "connections": [0, 0, 0, 0]
+    },
+    {
+        "name": "t-junction-up.png",
+        "connections": [1, 1, 1, 0]
+    },
+    {
+        "name": "t-junction-down.png",
+        "connections": [1, 0, 1, 1]
+    },
+    {
+        "name": "t-junction-left.png",
+        "connections": [1, 1, 0, 1]
+    },
+    {
+        "name": "t-junction-right.png",
+        "connections": [0, 1, 1, 1]
+    }
+]
