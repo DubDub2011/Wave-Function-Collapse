@@ -1,0 +1,119 @@
+[
+    {
+        "name": "0.png",
+        "connections": {
+            "0": "AAA",
+            "1": "AAA",
+            "2": "AAA",
+            "3": "AAA"
+        }
+    },
+    {
+        "name": "1.png",
+        "connections": {
+            "0": "BBB",
+            "1": "BBB",
+            "2": "BBB",
+            "3": "BBB"
+        }
+    },
+    {
+        "name": "2.png",
+        "connections": {
+            "0": "BBB",
+            "1": "BBB",
+            "2": "BCB",
+            "3": "BBB"
+        }
+    },
+    {
+        "name": "3.png",
+        "connections": {
+            "0": "BDB",
+            "1": "BBB",
+            "2": "BDB",
+            "3": "BBB"
+        }
+    },
+    {
+        "name": "4.png",
+        "connections": {
+            "0": "AAA",
+            "1": "ABB",
+            "2": "BCB",
+            "3": "BBA"
+        }
+    },
+    {
+        "name": "5.png",
+        "connections": {
+            "0": "BBA",
+            "1": "ABB",
+            "2": "BBB",
+            "3": "BBB"
+        }
+    },
+    {
+        "name": "6.png",
+        "connections": {
+            "0": "BCB",
+            "1": "BBB",
+            "2": "BCB",
+            "3": "BBB"
+        }
+    },
+    {
+        "name": "7.png",
+        "connections": {
+            "0": "BCB",
+            "1": "BDB",
+            "2": "BCB",
+            "3": "BDB"
+        }
+    },
+    {
+        "name": "8.png",
+        "connections": {
+            "0": "BBB",
+            "1": "BDB",
+            "2": "BBB",
+            "3": "BCB"
+        }
+    },
+    {
+        "name": "9.png",
+        "connections": {
+            "0": "BCB",
+            "1": "BCB",
+            "2": "BCB",
+            "3": "BBB"
+        }
+    },
+    {
+        "name": "10.png",
+        "connections": {
+            "0": "BCB",
+            "1": "BCB",
+            "2": "BCB",
+            "3": "BCB"
+        }
+    },
+    {
+        "name": "11.png",
+        "connections": {
+            "0": "BBB",
+            "1": "BCB",
+            "2": "BCB",
+            "3": "BBB"
+        }
+    },
+    {
+        "name": "12.png",
+        "connections": {
+            "0": "BCB",
+            "1": "BBB",
+            "2": "BCB",
+            "3": "BBB"
+        }
+    }
+]
