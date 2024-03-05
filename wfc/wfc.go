@@ -30,7 +30,9 @@ func Collapse(tiles []Tile, width int, height int) ([][]int, error) {
 			prevTileId := tileGrid.getTileId(prevTile.pos)
 			for idx, otc := range prevTile.oldTileConfig {
 				if otc.Id == prevTileId.Id {
-					prevTile.oldTileConfig = append(prevTile.oldTileConfig[:idx], prevTile.oldTileConfig[idx+1:]...)
+					prevTile.oldTileConfig[idx] = prevTile.oldTileConfig[len(prevTile.oldTileConfig)-1]
+					prevTile.oldTileConfig = prevTile.oldTileConfig[:len(prevTile.oldTileConfig)-1]
+					break
 				}
 			}
 
@@ -83,10 +85,18 @@ type position struct {
 
 type Tile struct {
 	Id            int
-	Configuration []int // left, up, right, down
+	Configuration map[int]string // left, up, right, down
 }
 
 func match(dir int, tile1, tile2 Tile) bool {
 	// four cardinal directions, adding 2 gets to the opposite and then remainder of 4 to prevent out of range
-	return tile1.Configuration[dir] == tile2.Configuration[(dir+2)%4]
+	return tile1.Configuration[dir] == reverse(tile2.Configuration[(dir+2)%4])
+}
+
+func reverse(s string) string {
+	runes := []rune(s)
+	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
+		runes[i], runes[j] = runes[j], runes[i]
+	}
+	return string(runes)
 }

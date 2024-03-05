@@ -39,7 +39,7 @@ func generateTileSet(height int) []Tile {
 	for i := 0; i < height; i++ {
 		tileSet[i] = Tile{
 			Id:            i,
-			Configuration: []int{i, i, i, i}, // Example configuration
+			Configuration: map[int]string{LEFT: "AAA", UP: "AAA", RIGHT: "AAA", DOWN: "AAA"},
 		}
 	}
 	return tileSet

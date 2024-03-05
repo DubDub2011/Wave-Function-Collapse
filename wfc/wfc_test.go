@@ -14,10 +14,10 @@ func Test_Collapse_Simple(t *testing.T) {
 		{
 			"Small grid, two tile",
 			[]Tile{
-				{1, []int{0, 0, 0, 0}},
-				{2, []int{1, 0, 1, 0}},
-				{3, []int{0, 0, 1, 0}},
-				{4, []int{0, 0, 0, 1}},
+				{1, map[int]string{LEFT: "AAA", UP: "AAA", RIGHT: "AAA", DOWN: "AAA"}},
+				{2, map[int]string{LEFT: "BBB", UP: "AAA", RIGHT: "BBB", DOWN: "AAA"}},
+				{3, map[int]string{LEFT: "AAA", UP: "AAA", RIGHT: "BBB", DOWN: "AAA"}},
+				{4, map[int]string{LEFT: "AAA", UP: "AAA", RIGHT: "AAA", DOWN: "BBB"}},
 			},
 			10, 10,
 		},
@@ -39,8 +39,8 @@ func Test_Collapse_Simple(t *testing.T) {
 
 func Test_tileGrid_tileWithLowestEntropy(t *testing.T) {
 	tg := newTileGrid(2, 2, []Tile{
-		{1, []int{0, 0, 0, 0}},
-		{2, []int{0, 0, 0, 0}},
+		{1, map[int]string{LEFT: "AAA", UP: "AAA", RIGHT: "AAA", DOWN: "AAA"}},
+		{2, map[int]string{LEFT: "AAA", UP: "AAA", RIGHT: "AAA", DOWN: "AAA"}},
 	})
 
 	tg.tiles[1][1] = []Tile{}
@@ -55,8 +55,8 @@ func Test_tileGrid_tileWithLowestEntropy(t *testing.T) {
 
 func Test_tileGrid_collapseTile_success(t *testing.T) {
 	tg := newTileGrid(2, 2, []Tile{
-		{1, []int{0, 0, 0, 0}},
-		{1, []int{0, 0, 0, 0}},
+		{1, map[int]string{LEFT: "AAA", UP: "AAA", RIGHT: "AAA", DOWN: "AAA"}},
+		{2, map[int]string{LEFT: "AAA", UP: "AAA", RIGHT: "AAA", DOWN: "AAA"}},
 	})
 
 	pos := position{0, 0}
@@ -70,15 +70,15 @@ func Test_tileGrid_collapseTile_success(t *testing.T) {
 		t.Errorf("Failed, expected %v, got %v", true, success)
 	}
 
-	expected := Tile{1, []int{0, 0, 0, 0}}
+	expected := Tile{1, map[int]string{LEFT: "AAA", UP: "AAA", RIGHT: "AAA", DOWN: "AAA"}}
 	if !reflect.DeepEqual(expected, tg.tiles[pos.x][pos.y][0]) {
 		t.Errorf("Failed, expected %v, got %v", expected, tg.tiles[pos.x][pos.y])
 	}
 }
 
 func Test_tileGrid_collapseTile_neighboursUpdate(t *testing.T) {
-	tile1 := Tile{1, []int{0, 0, 0, 1}}
-	tile2 := Tile{1, []int{0, 1, 0, 0}}
+	tile1 := Tile{1, map[int]string{LEFT: "AAA", UP: "AAA", RIGHT: "AAA", DOWN: "BBB"}}
+	tile2 := Tile{1, map[int]string{LEFT: "AAA", UP: "BBB", RIGHT: "AAA", DOWN: "AAA"}}
 	tg := newTileGrid(2, 2, []Tile{
 		tile1,
 		tile2,
@@ -121,57 +121,64 @@ func Test_match(t *testing.T) {
 		{
 			"Empty tiles, should match",
 			UP,
-			Tile{0, []int{0, 0, 0, 0}},
-			Tile{0, []int{0, 0, 0, 0}},
+			Tile{0, map[int]string{LEFT: "AAA", UP: "AAA", RIGHT: "AAA", DOWN: "AAA"}},
+			Tile{1, map[int]string{LEFT: "AAA", UP: "AAA", RIGHT: "AAA", DOWN: "AAA"}},
 			true,
 		},
 		{
 			"Tile with up and tile with matching down, should match",
 			UP,
-			Tile{0, []int{0, 1, 0, 0}},
-			Tile{0, []int{0, 0, 0, 1}},
+			Tile{0, map[int]string{LEFT: "AAA", UP: "BBB", RIGHT: "AAA", DOWN: "AAA"}},
+			Tile{0, map[int]string{LEFT: "AAA", UP: "AAA", RIGHT: "AAA", DOWN: "BBB"}},
 			true,
 		},
 		{
 			"Tile with up and tile without matching down, should not match",
 			UP,
-			Tile{0, []int{0, 1, 0, 0}},
-			Tile{0, []int{0, 0, 0, 0}},
+			Tile{0, map[int]string{LEFT: "AAA", UP: "BBB", RIGHT: "AAA", DOWN: "AAA"}},
+			Tile{0, map[int]string{LEFT: "AAA", UP: "AAA", RIGHT: "AAA", DOWN: "AAA"}},
 			false,
 		},
 		{
 			"Tile with up and tile without matching down, should not match",
 			UP,
-			Tile{0, []int{0, 1, 0, 0}},
-			Tile{0, []int{0, 0, 0, 2}},
+			Tile{0, map[int]string{LEFT: "AAA", UP: "BBB", RIGHT: "AAA", DOWN: "AAA"}},
+			Tile{0, map[int]string{LEFT: "AAA", UP: "AAA", RIGHT: "AAA", DOWN: "CCC"}},
 			false,
 		},
 		{
 			"Full tiles, up, should match",
 			UP,
-			Tile{0, []int{1, 1, 1, 1}},
-			Tile{0, []int{1, 1, 1, 1}},
+			Tile{0, map[int]string{LEFT: "BBB", UP: "BBB", RIGHT: "BBB", DOWN: "BBB"}},
+			Tile{0, map[int]string{LEFT: "BBB", UP: "BBB", RIGHT: "BBB", DOWN: "BBB"}},
 			true,
 		},
 		{
 			"Full tiles, left, should match",
 			LEFT,
-			Tile{0, []int{1, 1, 1, 1}},
-			Tile{0, []int{1, 1, 1, 1}},
+			Tile{0, map[int]string{LEFT: "AAA", UP: "AAA", RIGHT: "AAA", DOWN: "AAA"}},
+			Tile{0, map[int]string{LEFT: "AAA", UP: "AAA", RIGHT: "AAA", DOWN: "AAA"}},
 			true,
 		},
 		{
 			"Full tiles, right, should match",
 			RIGHT,
-			Tile{0, []int{1, 1, 1, 1}},
-			Tile{0, []int{1, 1, 1, 1}},
+			Tile{0, map[int]string{LEFT: "AAA", UP: "AAA", RIGHT: "AAA", DOWN: "AAA"}},
+			Tile{0, map[int]string{LEFT: "AAA", UP: "AAA", RIGHT: "AAA", DOWN: "AAA"}},
 			true,
 		},
 		{
 			"Full tiles, down, should match",
 			DOWN,
-			Tile{0, []int{1, 1, 1, 1}},
-			Tile{0, []int{1, 1, 1, 1}},
+			Tile{0, map[int]string{LEFT: "AAA", UP: "AAA", RIGHT: "AAA", DOWN: "AAA"}},
+			Tile{0, map[int]string{LEFT: "AAA", UP: "AAA", RIGHT: "AAA", DOWN: "AAA"}},
+			true,
+		},
+		{
+			"Assymetric tiles, down, should match",
+			DOWN,
+			Tile{0, map[int]string{LEFT: "AAA", UP: "AAA", RIGHT: "AAA", DOWN: "AAB"}},
+			Tile{0, map[int]string{LEFT: "AAA", UP: "AAB", RIGHT: "AAA", DOWN: "AAA"}},
 			true,
 		},
 	}
