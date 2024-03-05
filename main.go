@@ -7,12 +7,15 @@ import (
 	"os"
 	"runtime/pprof"
 	"wavefunctioncollapse/gui"
+	imageprocess "wavefunctioncollapse/imageProcess"
 )
 
 var (
 	width  = flag.Int("width", 32, "width of grid to collapse")
 	height = flag.Int("height", 18, "height of grid to collapse")
-	dir    = flag.String("directory", "assets", "directory of tiles with config to run against")
+	dir    = flag.String("directory", "", "directory of tiles with config to run against")
+
+	process = flag.String("process", "", "directory of tiles to process ")
 
 	cpuProfile = flag.String("cpuprofile", "", "write cpu profile to file")
 )
@@ -29,5 +32,15 @@ func main() {
 		defer pprof.StopCPUProfile()
 	}
 
-	gui.RunSimulation(*dir, *width, *height)
+	if dir == nil && process == nil {
+		log.Fatalf("Require process or dir flag to be passed")
+	}
+
+	if *process != "" {
+		imageprocess.ProcessDir(*process)
+	}
+
+	if *dir != "" {
+		gui.RunSimulation(*dir, *width, *height)
+	}
 }
