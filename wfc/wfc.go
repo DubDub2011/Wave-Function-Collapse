@@ -4,7 +4,9 @@ import (
 	"math/rand"
 )
 
-func Collapse(tiles []Tile, width int, height int) ([][]int, error) {
+// Exposed function to run the collapse algorithm against a tileset
+// Mainly responsible for orchestrating interal structures to run the algorithm
+func Collapse(tiles []Tile, width int, height int) [][]int {
 	tileGrid := newTileGrid(width, height, tiles)
 	positionTracker := tileStack{}
 
@@ -37,10 +39,10 @@ func Collapse(tiles []Tile, width int, height int) ([][]int, error) {
 			}
 
 			// Now update grid to state prior to collapse
-			tileGrid.revertTileConfig(prevTile.pos, prevTile.oldTileConfig)
+			tileGrid.updateTileConfig(prevTile.pos, prevTile.oldTileConfig)
 			revertNeighbourFunc := func(tileConf []Tile, pos position) {
 				if tileConf != nil {
-					tileGrid.revertTileConfig(pos, tileConf)
+					tileGrid.updateTileConfig(pos, tileConf)
 				}
 			}
 			revertNeighbourFunc(prevTile.oldNeighbours[UP], position{prevTile.pos.x, prevTile.pos.y + 1})
@@ -69,7 +71,7 @@ func Collapse(tiles []Tile, width int, height int) ([][]int, error) {
 		}
 	}
 
-	return tileGrid.getTileIds(), nil
+	return tileGrid.getTileIds()
 }
 
 const (

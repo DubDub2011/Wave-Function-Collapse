@@ -26,12 +26,7 @@ func Test_Collapse_Simple(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			// Call the function from your package
-			result, err := Collapse(tc.tileSet, tc.width, tc.height)
-			if err != nil {
-				// Check if the result matches the expected value
-				t.Errorf("Failed, expected no error, got %v", err)
-				t.Logf("Result set: %v", result)
-			}
+			Collapse(tc.tileSet, tc.width, tc.height)
 		})
 	}
 
@@ -43,7 +38,7 @@ func Test_tileGrid_tileWithLowestEntropy(t *testing.T) {
 		{2, map[int]string{LEFT: "AAA", UP: "AAA", RIGHT: "AAA", DOWN: "AAA"}},
 	})
 
-	tg.tiles[1][1] = []Tile{}
+	tg.tileConfigurations[1][1] = []Tile{}
 
 	expected := position{1, 1}
 	pos := tg.tileWithLowestEntropy()
@@ -71,8 +66,8 @@ func Test_tileGrid_collapseTile_success(t *testing.T) {
 	}
 
 	expected := Tile{1, map[int]string{LEFT: "AAA", UP: "AAA", RIGHT: "AAA", DOWN: "AAA"}}
-	if !reflect.DeepEqual(expected, tg.tiles[pos.x][pos.y][0]) {
-		t.Errorf("Failed, expected %v, got %v", expected, tg.tiles[pos.x][pos.y])
+	if !reflect.DeepEqual(expected, tg.tileConfigurations[pos.x][pos.y][0]) {
+		t.Errorf("Failed, expected %v, got %v", expected, tg.tileConfigurations[pos.x][pos.y])
 	}
 }
 
@@ -95,8 +90,8 @@ func Test_tileGrid_collapseTile_neighboursUpdate(t *testing.T) {
 		t.Errorf("Failed, expected %v, got %v", true, success)
 	}
 
-	collapsedTile := tg.tiles[pos.x][pos.y][0]
-	neighbourBelow := tg.tiles[pos.x][pos.y+1][0]
+	collapsedTile := tg.tileConfigurations[pos.x][pos.y][0]
+	neighbourBelow := tg.tileConfigurations[pos.x][pos.y+1][0]
 
 	var expectedBelow Tile
 	if reflect.DeepEqual(collapsedTile, tile1) {

@@ -26,7 +26,7 @@ func BenchmarkCollapse(b *testing.B) {
 			fmt.Sprintf("Width%d_Height%d_TileSet%d", scenario.width, scenario.height, len(scenario.tileset)),
 			func(b *testing.B) {
 				for i := 0; i < b.N; i++ {
-					_, _ = Collapse(scenario.tileset, scenario.width, scenario.height)
+					Collapse(scenario.tileset, scenario.width, scenario.height)
 				}
 			},
 		)

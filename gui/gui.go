@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"image"
-	"log"
 	"os"
 	"path"
 	"wavefunctioncollapse/wfc"
@@ -13,26 +12,27 @@ import (
 )
 
 type ConfigTile struct {
-	Name        string `json:"name"`
-	RotateBy    int    `json:"rotateBy"`
-	Connections []int  `json:"connections"`
+	Name        string         `json:"name"`
+	Connections map[int]string `json:"connections"`
 }
 
 type tileImage struct {
-	img           *ebiten.Image // image to output
-	rotateDegrees int           // degrees to rotate by
+	img *ebiten.Image // image to output
 }
 
 type Simulation struct {
 	tileImages                 map[int]*tileImage
 	tileSet                    []wfc.Tile
-	width, length              int
 	result                     *[][]int
+	width, height              int
 	aspectRatioX, aspectRatioY int
 	screenWidth, screenHeight  int
 }
 
-func NewSimulation(tileDir string, width, length int) Simulation {
+func RunSimulation(tileDir string, width, height int) {
+	ebiten.SetWindowSize(1600, 900)
+	ebiten.SetWindowTitle("Wave function collapse")
+
 	configPath := path.Join(tileDir, "config.json")
 	data, err := os.ReadFile(configPath)
 	if err != nil {
@@ -70,33 +70,28 @@ func NewSimulation(tileDir string, width, length int) Simulation {
 
 		tiles[id] = &tileImage{
 			ebitenImg,
-			tile.RotateBy,
 		}
 	}
 
-	res, err := wfc.Collapse(tileSet, width, length)
-	if err != nil {
-		panic(fmt.Errorf("failed to run first collapse with error %v", err))
-	}
-
-	return Simulation{
+	res := wfc.Collapse(tileSet, width, height)
+	sim := Simulation{
 		tileImages:   tiles,
 		tileSet:      tileSet,
 		width:        width,
-		length:       length,
+		height:       height,
 		result:       &res,
 		aspectRatioX: 16, aspectRatioY: 9,
 		screenWidth: 1280, screenHeight: 720,
+	}
+
+	if err := ebiten.RunGame(sim); err != nil {
+		panic(err)
 	}
 }
 
 func (g Simulation) Update(screen *ebiten.Image) error {
 	if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
-		res, err := wfc.Collapse(g.tileSet, g.width, g.length)
-		if err != nil {
-			panic(fmt.Errorf("failed to run collapse with error %v", err))
-		}
-
+		res := wfc.Collapse(g.tileSet, g.width, g.height)
 		*g.result = res
 	}
 
@@ -111,8 +106,8 @@ func (sim Simulation) Draw(screen *ebiten.Image) {
 			imgWidth, imgHeight := img.img.Size()
 
 			imgOptions := ebiten.DrawImageOptions{}
-			tileLen := float64(sim.screenWidth / sim.aspectRatioX)
-			tileWid := float64(sim.screenHeight / sim.aspectRatioY)
+			tileLen := float64(sim.screenWidth / sim.width)
+			tileWid := float64(sim.screenHeight / sim.height)
 			imgOptions.GeoM.Scale(
 				tileLen/float64(imgWidth),
 				tileWid/float64(imgHeight))
@@ -125,13 +120,4 @@ func (sim Simulation) Draw(screen *ebiten.Image) {
 
 func (sim Simulation) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
 	return sim.screenWidth, sim.screenHeight
-}
-
-func RunSimulation() {
-	ebiten.SetWindowSize(1280, 720)
-	ebiten.SetWindowTitle("Wave function collapse")
-	sim := NewSimulation("assets", 16, 9)
-	if err := ebiten.RunGame(sim); err != nil {
-		log.Fatal(err)
-	}
 }
