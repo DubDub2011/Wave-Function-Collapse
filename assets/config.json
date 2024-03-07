@@ -1,22 +1,47 @@
 [
     {
         "name": "blank.png",
-        "connections": [0, 0, 0, 0]
+        "connections": {
+            "0": "AAA",
+            "1": "AAA",
+            "2": "AAA",
+            "3": "AAA"
+        }
     },
     {
         "name": "t-junction-up.png",
-        "connections": [1, 1, 1, 0]
+        "connections": {
+            "0": "BBB",
+            "1": "BBB",
+            "2": "BBB",
+            "3": "AAA"
+        }
     },
     {
         "name": "t-junction-down.png",
-        "connections": [1, 0, 1, 1]
+        "connections": {
+            "0": "BBB",
+            "1": "AAA",
+            "2": "BBB",
+            "3": "BBB"
+        }
     },
     {
         "name": "t-junction-left.png",
-        "connections": [1, 1, 0, 1]
+        "connections": {
+            "0": "BBB",
+            "1": "BBB",
+            "2": "AAA",
+            "3": "BBB"
+        }
     },
     {
         "name": "t-junction-right.png",
-        "connections": [0, 1, 1, 1]
+        "connections": {
+            "0": "AAA",
+            "1": "BBB",
+            "2": "BBB",
+            "3": "BBB"
+        }
     }
 ]
